@@ -203,7 +203,7 @@ export default function About() {
           >
             <motion.div
               className="bg-[#081018] w-full max-w-4xl rounded-2xl p-6 md:p-10 relative"
-              onClick={(e: React.MouseEvent<HTMLButtonElement>) => e.stopPropagation()}
+              onClick={(e) => e.stopPropagation()}
               initial={{ opacity: 0, y: 20, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 20, scale: 0.95 }}
