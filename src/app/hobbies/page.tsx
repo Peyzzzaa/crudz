@@ -6,15 +6,15 @@ import { motion } from "framer-motion";
 
 export default function Hobbies() {
   const hobbies = [
-    { id: 1, title: "BADMINTON", img: "/hobby2.jfif" },
-    { id: 2, title: "GAMING", img: "/gaming.jfif" },
-    { id: 3, title: "ATHLETICS", img: "/hobby5.jfif" },
-    { id: 4, title: "EATING", img: "/hobby1.jfif" },
-    { id: 5, title: "TRAVELING", img: "/travel.jfif" },
+    { id: 1, title: "BADMINTON", img: "/bad.png" },
+    { id: 2, title: "GAMING", img: "/gaming.png" },
+    { id: 3, title: "ATHLETICS", img: "/ath.png" },
+    { id: 4, title: "EATING", img: "/eat.png" },
+    { id: 5, title: "TRAVELING", img: "/travel.png" },
     { id: 6, title: "COLLECTING", img: "/hot.jpg" },
-    { id: 7, title: "ROADTRIP", img: "/road.jfif" },
-    { id: 8, title: "NATURETRIP", img: "/nature.jfif" },
-    { id: 9, title: "GYM", img: "/gym.jfif" },
+    { id: 7, title: "ROADTRIP", img: "/road.png" },
+    { id: 8, title: "NATURETRIP", img: "/nature.png" },
+    { id: 9, title: "GYM", img: "/gym.png" },
   ];
 
   return (
