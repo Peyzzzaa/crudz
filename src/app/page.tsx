@@ -1,65 +1,106 @@
-import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+    <>
+      {/* --- NAVIGATION BAR --- */}
+      <nav className="w-full fixed top-0 left-0 z-50 flex justify-center py-6">
+        <ul className="flex gap-6 bg-white/10 backdrop-blur-xl px-10 py-3 rounded-full border border-white/10">
+
+          <li>
+            <Link
+              href="/"
+              className="px-5 py-2 rounded-full bg-pink-400 text-black font-semibold shadow-md hover:bg-pink-300 transition"
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+              HOME
+            </Link>
+          </li>
+
+          <li>
+            <Link
+              href="/about"
+              className="px-5 py-2 rounded-full text-white hover:bg-white/20 transition"
             >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+              ABOUT
+            </Link>
+          </li>
+
+          <li>
+            <Link
+              href="/education"
+              className="px-5 py-2 rounded-full text-white hover:bg-white/20 transition"
+            >
+              EDUCATION
+            </Link>
+          </li>
+
+          <li>
+            <Link
+              href="/hobbies"
+              className="px-5 py-2 rounded-full text-white hover:bg-white/20 transition"
+            >
+              HOBBIES
+            </Link>
+          </li>
+
+          <li>
+            <Link
+              href="/contact"
+              className="px-5 py-2 rounded-full text-white hover:bg-white/20 transition"
+            >
+              CONTACT
+            </Link>
+          </li>
+
+        </ul>
+      </nav>
+
+      {/* --- HERO SECTION --- */}
+      <section
+        className="relative w-full min-h-screen flex items-center justify-center text-white overflow-hidden"
+        style={{
+          background:
+            "linear-gradient(160deg, rgba(255,43,117,0.8) 0%, rgba(10,10,10,0.8) 70%), url(/bg1.jpg)",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
+        {/* ANIMATION */}
+        <style>
+          {`
+            @keyframes floatFade {
+              0% { opacity: 0.2; transform: translateY(0px); }
+              50% { opacity: 0.5; transform: translateY(-12px); }
+              100% { opacity: 0.2; transform: translateY(0px); }
+            }
+          `}
+        </style>
+
+        {/* KARRYL FAYE — ALL PINK */}
+        <h1
+          className="absolute top-20 text-pink-500 text-[90px] md:text-[160px] font-extrabold tracking-tight select-none opacity-70"
+          style={{ animation: "floatFade 2s ease-in-out infinite" }}
+        >
+          KARRYL FAYE
+        </h1>
+
+        {/* ARAÑEZ — PINK */}
+        <h1
+          className="absolute top-[33%] text-[80px] md:text-[150px] font-extrabold tracking-tight select-none text-white-500 opacity-70"
+          style={{ animation: "floatFade 3s ease-in-out infinite" }}
+        >
+          ARANEZ
+        </h1>
+
+        {/* IMAGE */}
+        <div className="absolute bottom-0 z-20">
+          <img
+            src="/picko.png"
+            alt="Karryl Faye"
+            className="w-[300px] md:w-[510px] drop-shadow-[0_0_40px_rgba(255,0,150,0.5)]"
+          />
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+      </section>
+    </>
   );
 }
