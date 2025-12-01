@@ -6,8 +6,18 @@ import Link from "next/link";
 import { ShoppingCart, Trash2 } from "lucide-react";
 import BubbleBackground from "@/components/ui/BubbleBackground";
 
+// -------------------
+// TYPE DEFINITIONS
+// -------------------
+interface CartItem {
+  name: string;
+  img: string;
+  price: string;
+  type?: string;
+}
+
 export default function CartPage() {
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] = useState<CartItem[]>([]);
 
   // Load cart from localStorage
   useEffect(() => {
@@ -15,16 +25,16 @@ export default function CartPage() {
     if (saved) setCart(JSON.parse(saved));
   }, []);
 
-  // Remove item by name
-  const removeItem = (name) => {
+  // Remove item by name (FIXED TYPE)
+  const removeItem = (name: string) => {
     const updated = cart.filter((item) => item.name !== name);
     setCart(updated);
     localStorage.setItem("cart-items", JSON.stringify(updated));
   };
 
-  // FIX: Convert ANY price (₱350 / 350 CP / ₱350 CP)
+  // FIX: Convert ANY price text → number
   const subtotal = cart.reduce((sum, item) => {
-    const numeric = parseInt(item.price.replace(/\D/g, "")); // FIXED
+    const numeric = parseInt(item.price.replace(/\D/g, ""));
     return sum + (isNaN(numeric) ? 0 : numeric);
   }, 0);
 
@@ -73,7 +83,7 @@ export default function CartPage() {
           </div>
         </Link>
 
-        {/* PROFILE ICON (RESTORED) */}
+        {/* PROFILE ICON */}
         <Link href="/profile">
           <div className="w-12 h-12 rounded-full border-2 border-red-500 overflow-hidden relative cursor-pointer">
             <Image src="/profile.png" alt="profile" fill className="object-cover" />
