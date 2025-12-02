@@ -18,31 +18,42 @@ export default function RegisterPage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
+  const [loading, setLoading] = useState(false); // ✅ Loading state
+
   async function handleRegister(e: FormEvent) {
     e.preventDefault();
     setError("");
     setSuccess("");
+    setLoading(true); // ⬅️ Enable loader
 
-    const res = await fetch(`${API_BASE}/register`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        username,
-        password,
-        birthdate,
-        civil_status: civilStatus,
-      }),
-    });
+    try {
+      const res = await fetch(`${API_BASE}/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username,
+          password,
+          birthdate,
+          civil_status: civilStatus,
+        }),
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (!res.ok) {
-      setError(data.message || "Registration failed");
-      return;
+      if (!res.ok) {
+        setError(data.message || "Registration failed");
+        setLoading(false); // ⬅️ Stop loader
+        return;
+      }
+
+      setSuccess("Account created successfully!");
+      setTimeout(() => router.push("/login"), 1500);
+
+    } catch {
+      setError("Network slow or server unreachable.");
     }
 
-    setSuccess("Account created successfully!");
-    setTimeout(() => router.push("/login"), 1500);
+    setLoading(false);
   }
 
   return (
@@ -154,10 +165,11 @@ export default function RegisterPage() {
 
             <Button
               type="submit"
+              disabled={loading} // ⬅️ Disable button during loading
               className="w-full bg-red-700 text-white hover:bg-red-800 
-                         py-6 rounded-xl text-lg shadow-lg"
+                         py-6 rounded-xl text-lg shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Register
+              {loading ? "Processing..." : "Register"}
             </Button>
           </form>
 
@@ -172,7 +184,14 @@ export default function RegisterPage() {
         </div>
       </div>
 
-      {/* GLOW ANIMATION */}
+      {/* FULL SCREEN LOADING OVERLAY */}
+      {loading && (
+        <div className="absolute inset-0 bg-black/80 flex items-center justify-center z-50">
+          <div className="loader"></div>
+        </div>
+      )}
+
+      {/* STYLES */}
       <style>
         {`
         @keyframes glowRed {
@@ -183,6 +202,20 @@ export default function RegisterPage() {
 
         .animate-glow-red {
           animation: glowRed 2s infinite ease-in-out;
+        }
+
+        /* LOADER */
+        .loader {
+          width: 60px;
+          height: 60px;
+          border: 6px solid rgba(255, 0, 0, 0.3);
+          border-top-color: red;
+          border-radius: 50%;
+          animation: spin 0.9s linear infinite;
+        }
+
+        @keyframes spin {
+          to { transform: rotate(360deg); }
         }
         `}
       </style>

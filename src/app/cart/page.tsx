@@ -163,7 +163,7 @@ export default function CartPage() {
 
             <div className="border-t border-red-500/30 pt-4 flex justify-between text-2xl font-bold">
               <span>Total</span>
-              <span className="text-red-400">{total} CP</span>
+              <span className="text-red-400">₱{total}</span>
             </div>
           </div>
 
