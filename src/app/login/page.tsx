@@ -6,7 +6,6 @@ import { saveToken } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { API_BASE } from "@/lib/config";
 import { Eye, EyeOff, User, Lock } from "lucide-react";
-import Link from "next/link";
 
 type LoginResponse = {
   accessToken?: string;
@@ -70,20 +69,20 @@ export default function LoginPage() {
 
   return (
     <div
-      className="relative min-h-screen w-full bg-cover bg-center bg-black pointer-events-none"
+      className="relative min-h-screen w-full bg-cover bg-center bg-black"
       style={{ backgroundImage: "url('/deed.jpg')" }}
     >
-      <div className="absolute inset-0 bg-black/30 pointer-events-none"></div>
+      <div className="absolute inset-0 bg-black/30"></div>
 
-      <div className="absolute top-4 right-4 text-right z-20 pointer-events-auto">
+      <div className="absolute top-4 right-4 text-right z-20">
         <h1 className="text-2xl sm:text-3xl font-extrabold tracking-wide text-red-500 drop-shadow-lg">
           FIZZYYY
         </h1>
       </div>
 
-      <div className="absolute top-1/2 -translate-y-1/2 left-20 w-[380px] md:w-[420px] xl:w-[450px] z-20 pointer-events-auto">
+      <div className="absolute top-1/2 -translate-y-1/2 left-20 w-[380px] md:w-[420px] xl:w-[450px] z-20">
         <div className="bg-black/85 backdrop-blur-md rounded-2xl shadow-2xl border border-red-600/60 p-8 md:p-10 animate-glow-red">
-          {!loading ? (
+          {!loading && (
             <>
               <h2 className="text-center text-4xl font-bold text-red-500 drop-shadow">
                 Welcome Soldier!
@@ -92,7 +91,7 @@ export default function LoginPage() {
                 Login to continue
               </p>
 
-              <form onSubmit={handleLogin} className="space-y-5 pointer-events-auto">
+              <form onSubmit={handleLogin} className="space-y-5">
                 <div className="relative">
                   <input
                     type="text"
@@ -133,21 +132,22 @@ export default function LoginPage() {
                 </Button>
               </form>
 
-              <div className="mt-4 text-center pointer-events-auto">
-                <Link
-                  href="/register"
-                  className="text-red-400 hover:text-red-300 underline"
+              {/* Fixed "Create Account" link */}
+              <div className="mt-4 text-center">
+                <a
+                  onClick={() => router.push("/register")}
+                  className="text-red-400 hover:text-red-300 underline cursor-pointer"
                 >
                   Create an account
-                </Link>
+                </a>
               </div>
             </>
-          ) : null}
+          )}
         </div>
       </div>
 
       {loading && (
-        <div className="fixed inset-0 bg-black/80 flex flex-col items-center justify-center z-50 animate-fade-in pointer-events-auto">
+        <div className="fixed inset-0 bg-black/80 flex flex-col items-center justify-center z-50 animate-fade-in">
           <div className="loader"></div>
           <p className="text-gray-300 mt-5 text-xl tracking-wide">
             Logging in...
