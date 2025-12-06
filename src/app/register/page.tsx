@@ -17,6 +17,7 @@ export default function RegisterPage() {
   const [showPass, setShowPass] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+
   const [loading, setLoading] = useState(false);
 
   async function handleRegister(e: FormEvent) {
@@ -47,6 +48,7 @@ export default function RegisterPage() {
 
       if (!res.ok) {
         setError(data.message || "Registration failed");
+        setLoading(false);
         return;
       }
 
@@ -72,7 +74,7 @@ export default function RegisterPage() {
         </h1>
       </div>
 
-      <div className="absolute top-19 left-20 w-[380px] md:w-[430px] xl:w-[450px] z-20">
+      <div className="absolute top-1/2 -translate-y-1/2 left-20 w-[380px] md:w-[430px] xl:w-[450px] z-20">
         <div className="bg-black/85 backdrop-blur-md rounded-2xl shadow-2xl border border-red-700/60 p-8 md:p-10 animate-glow-red">
           {!loading && (
             <>
@@ -84,7 +86,6 @@ export default function RegisterPage() {
               </p>
 
               <form onSubmit={handleRegister} className="space-y-5">
-                {/* Username */}
                 <div className="relative">
                   <input
                     type="text"
@@ -97,7 +98,6 @@ export default function RegisterPage() {
                   <User className="absolute left-3 top-3 text-red-500" size={18} />
                 </div>
 
-                {/* Password */}
                 <div className="relative">
                   <input
                     type={showPass ? "text" : "password"}
@@ -117,7 +117,6 @@ export default function RegisterPage() {
                   </button>
                 </div>
 
-                {/* Birthdate */}
                 <div className="relative">
                   <input
                     type="date"
@@ -129,7 +128,6 @@ export default function RegisterPage() {
                   <Calendar className="absolute left-3 top-3 text-red-500" size={18} />
                 </div>
 
-                {/* Civil Status */}
                 <div className="relative">
                   <select
                     value={civilStatus}
@@ -145,11 +143,9 @@ export default function RegisterPage() {
                   <Heart className="absolute left-3 top-3 text-red-500" size={18} />
                 </div>
 
-                {/* Error / Success */}
                 {error && <p className="text-red-400 text-sm text-center">{error}</p>}
                 {success && <p className="text-green-400 text-sm text-center">{success}</p>}
 
-                {/* Register button */}
                 <Button
                   type="submit"
                   disabled={loading}
@@ -159,11 +155,10 @@ export default function RegisterPage() {
                 </Button>
               </form>
 
-              {/* Back to login */}
               <div className="mt-4 text-center">
                 <a
-                  onClick={() => router.push("/login")}
-                  className="text-gray-300 hover:text-red-400 underline cursor-pointer"
+                  href="/login"
+                  className="text-gray-300 hover:text-red-400 underline"
                 >
                   Back to Login
                 </a>
@@ -173,7 +168,6 @@ export default function RegisterPage() {
         </div>
       </div>
 
-      {/* Loading overlay */}
       {loading && (
         <div className="absolute inset-0 bg-black/80 flex items-center justify-center z-50">
           <div className="loader"></div>
@@ -182,23 +176,28 @@ export default function RegisterPage() {
 
       <style>
         {`
-          @keyframes glowRed {
-            0% { box-shadow: 0 0 8px rgba(255,0,0,0.4); }
-            50% { box-shadow: 0 0 18px rgba(255,0,0,0.9); }
-            100% { box-shadow: 0 0 8px rgba(255,0,0,0.4); }
-          }
-          .animate-glow-red { animation: glowRed 2s infinite ease-in-out; }
+        @keyframes glowRed {
+          0% { box-shadow: 0 0 8px rgba(255,0,0,0.4); }
+          50% { box-shadow: 0 0 18px rgba(255,0,0,0.9); }
+          100% { box-shadow: 0 0 8px rgba(255,0,0,0.4); }
+        }
 
-          .loader {
-            width: 60px;
-            height: 60px;
-            border: 6px solid rgba(255, 0, 0, 0.3);
-            border-top-color: red;
-            border-radius: 50%;
-            animation: spin 0.9s linear infinite;
-          }
+        .animate-glow-red {
+          animation: glowRed 2s infinite ease-in-out;
+        }
 
-          @keyframes spin { to { transform: rotate(360deg); } }
+        .loader {
+          width: 60px;
+          height: 60px;
+          border: 6px solid rgba(255, 0, 0, 0.3);
+          border-top-color: red;
+          border-radius: 50%;
+          animation: spin 0.9s linear infinite;
+        }
+
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
         `}
       </style>
     </div>

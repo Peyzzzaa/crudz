@@ -6,6 +6,7 @@ import { saveToken } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { API_BASE } from "@/lib/config";
 import { Eye, EyeOff, User, Lock } from "lucide-react";
+import Link from "next/link";
 
 type LoginResponse = {
   accessToken?: string;
@@ -85,7 +86,7 @@ export default function LoginPage() {
           {!loading && (
             <>
               <h2 className="text-center text-4xl font-bold text-red-500 drop-shadow">
-                Welcome Soldier!
+                Welcome to CRUD!
               </h2>
               <p className="text-center text-gray-300 text-md mb-6">
                 Login to continue
@@ -132,14 +133,13 @@ export default function LoginPage() {
                 </Button>
               </form>
 
-              {/* Fixed "Create Account" link */}
               <div className="mt-4 text-center">
-                <a
-                  onClick={() => router.push("/register")}
-                  className="text-red-400 hover:text-red-300 underline cursor-pointer"
+                <Link
+                  href="/register"
+                  className="text-red-400 hover:text-red-300 underline"
                 >
                   Create an account
-                </a>
+                </Link>
               </div>
             </>
           )}
