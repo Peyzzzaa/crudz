@@ -6,6 +6,7 @@ import { saveToken } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { API_BASE } from "@/lib/config";
 import { Eye, EyeOff, User, Lock } from "lucide-react";
+import Link from "next/link";
 
 type LoginResponse = {
   accessToken?: string;
@@ -34,17 +35,14 @@ export default function LoginPage() {
     }
 
     if (!API_BASE) {
-      setError("API Base URL is not set.");
+      setError("API Base URL is not set. Contact admin.");
       return;
     }
 
     setLoading(true);
-
-    // Detect slow internet (if request takes too long)
     const slowTimer = setTimeout(() => setSlow(true), 3500);
 
     try {
-      // Correct endpoint with /auth prefix
       const res = await fetch(`${API_BASE}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -65,25 +63,25 @@ export default function LoginPage() {
       router.push("/dashboard");
     } catch {
       clearTimeout(slowTimer);
-      setError("Server error. Try again.");
+      setError("Server unreachable. Try again later.");
       setLoading(false);
     }
   }
 
   return (
     <div
-      className="relative min-h-screen w-full bg-cover bg-center bg-black"
+      className="relative min-h-screen w-full bg-cover bg-center bg-black pointer-events-none"
       style={{ backgroundImage: "url('/deed.jpg')" }}
     >
-      <div className="absolute inset-0 bg-black/30"></div>
+      <div className="absolute inset-0 bg-black/30 pointer-events-none"></div>
 
-      <div className="absolute top-4 right-4 text-right z-20">
+      <div className="absolute top-4 right-4 text-right z-20 pointer-events-auto">
         <h1 className="text-2xl sm:text-3xl font-extrabold tracking-wide text-red-500 drop-shadow-lg">
           FIZZYYY
         </h1>
       </div>
 
-      <div className="absolute top-1/2 -translate-y-1/2 left-20 w-[380px] md:w-[420px] xl:w-[450px] z-20">
+      <div className="absolute top-1/2 -translate-y-1/2 left-20 w-[380px] md:w-[420px] xl:w-[450px] z-20 pointer-events-auto">
         <div className="bg-black/85 backdrop-blur-md rounded-2xl shadow-2xl border border-red-600/60 p-8 md:p-10 animate-glow-red">
           {!loading ? (
             <>
@@ -94,7 +92,7 @@ export default function LoginPage() {
                 Login to continue
               </p>
 
-              <form onSubmit={handleLogin} className="space-y-5">
+              <form onSubmit={handleLogin} className="space-y-5 pointer-events-auto">
                 <div className="relative">
                   <input
                     type="text"
@@ -125,9 +123,7 @@ export default function LoginPage() {
                   </button>
                 </div>
 
-                {error && (
-                  <p className="text-red-400 text-sm text-center">{error}</p>
-                )}
+                {error && <p className="text-red-400 text-sm text-center">{error}</p>}
 
                 <Button
                   className="w-full bg-red-600 hover:bg-red-700 py-4 rounded-xl text-lg font-semibold text-white"
@@ -137,13 +133,13 @@ export default function LoginPage() {
                 </Button>
               </form>
 
-              <div className="mt-4 text-center">
-                <button
+              <div className="mt-4 text-center pointer-events-auto">
+                <Link
+                  href="/register"
                   className="text-red-400 hover:text-red-300 underline"
-                  onClick={() => router.push("/register")}
                 >
                   Create an account
-                </button>
+                </Link>
               </div>
             </>
           ) : null}
@@ -151,7 +147,7 @@ export default function LoginPage() {
       </div>
 
       {loading && (
-        <div className="fixed inset-0 bg-black/80 flex flex-col items-center justify-center z-50 animate-fade-in">
+        <div className="fixed inset-0 bg-black/80 flex flex-col items-center justify-center z-50 animate-fade-in pointer-events-auto">
           <div className="loader"></div>
           <p className="text-gray-300 mt-5 text-xl tracking-wide">
             Logging in...
@@ -171,30 +167,21 @@ export default function LoginPage() {
             50% { box-shadow: 0 0 20px rgba(255,0,0,1); }
             100% { box-shadow: 0 0 10px rgba(255,0,0,0.4); }
           }
-          .animate-glow-red {
-            animation: glowRed 2s infinite;
-          }
+          .animate-glow-red { animation: glowRed 2s infinite; }
 
-          @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-          }
-          .animate-fade-in {
-            animation: fadeIn 0.4s ease-out forwards;
-          }
+          @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+          .animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
 
           .loader {
             width: 65px;
             height: 65px;
-            border: 6px solid rgba(255, 0, 0, 0.3);
+            border: 6px solid rgba(255,0,0,0.3);
             border-top-color: red;
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
           }
 
-          @keyframes spin {
-            to { transform: rotate(360deg); }
-          }
+          @keyframes spin { to { transform: rotate(360deg); } }
         `}
       </style>
     </div>

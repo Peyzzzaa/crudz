@@ -26,14 +26,14 @@ export default function RegisterPage() {
     setSuccess("");
 
     if (!API_BASE) {
-      setError("API Base URL is not set.");
+      setError("API Base URL is not set. Contact admin.");
       return;
     }
 
     setLoading(true);
 
     try {
-      const res = await fetch(`${API_BASE}/auth/register`, { // ✅ FIXED URL
+      const res = await fetch(`${API_BASE}/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
