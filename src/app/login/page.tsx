@@ -33,66 +33,58 @@ export default function LoginPage() {
       return;
     }
 
+    if (!API_BASE) {
+      setError("API Base URL is not set.");
+      return;
+    }
+
     setLoading(true);
 
     // Detect slow internet (if request takes too long)
-    const slowTimer = setTimeout(() => {
-      setSlow(true);
-    }, 3500);
+    const slowTimer = setTimeout(() => setSlow(true), 3500);
 
-    // Wake server
-    await fetch(API_BASE, { method: "GET" }).catch(() => {});
-
-    const res = await fetch(`${API_BASE}/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password }),
-    });
-
-    clearTimeout(slowTimer);
-
-    let data: LoginResponse;
     try {
-      data = await res.json();
+      // Correct endpoint with /auth prefix
+      const res = await fetch(`${API_BASE}/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
+
+      clearTimeout(slowTimer);
+
+      const data: LoginResponse = await res.json();
+
+      if (!res.ok || !data.accessToken) {
+        setError(data.message || "Invalid username or password.");
+        setLoading(false);
+        return;
+      }
+
+      saveToken(data.accessToken);
+      router.push("/dashboard");
     } catch {
+      clearTimeout(slowTimer);
       setError("Server error. Try again.");
       setLoading(false);
-      return;
     }
-
-    if (!res.ok || !data.accessToken) {
-      setError(data.message || "Invalid username or password.");
-      setLoading(false);
-      return;
-    }
-
-    saveToken(data.accessToken);
-    router.push("/dashboard");
   }
 
   return (
     <div
       className="relative min-h-screen w-full bg-cover bg-center bg-black"
-      style={{ backgroundImage: "url('/cod.jpg')" }}
+      style={{ backgroundImage: "url('/deed.jpg')" }}
     >
-      {/* Background overlay */}
       <div className="absolute inset-0 bg-black/30"></div>
 
-      {/* TOP RIGHT TITLE */}
       <div className="absolute top-4 right-4 text-right z-20">
         <h1 className="text-2xl sm:text-3xl font-extrabold tracking-wide text-red-500 drop-shadow-lg">
           FIZZYYY
         </h1>
-        <p className="text-sm sm:text-lg font-semibold text-gray-300 drop-shadow-lg">
-          CALL OF DUTY STORE
-        </p>
       </div>
 
-      {/* LOGIN BOX */}
-      <div className="absolute top-1/2 -translate-y-1/2 right-10 w-[380px] md:w-[420px] xl:w-[450px] z-20">
+      <div className="absolute top-1/2 -translate-y-1/2 left-20 w-[380px] md:w-[420px] xl:w-[450px] z-20">
         <div className="bg-black/85 backdrop-blur-md rounded-2xl shadow-2xl border border-red-600/60 p-8 md:p-10 animate-glow-red">
-
-          {/* Form (hidden when loading) */}
           {!loading ? (
             <>
               <h2 className="text-center text-4xl font-bold text-red-500 drop-shadow">
@@ -158,15 +150,12 @@ export default function LoginPage() {
         </div>
       </div>
 
-      {/* FULL SCREEN LOADING OVERLAY */}
       {loading && (
         <div className="fixed inset-0 bg-black/80 flex flex-col items-center justify-center z-50 animate-fade-in">
           <div className="loader"></div>
-
           <p className="text-gray-300 mt-5 text-xl tracking-wide">
             Logging in...
           </p>
-
           {slow && (
             <p className="text-yellow-400 mt-3 text-sm">
               ⚠ Slow Internet Detected or Server Waking Up...
@@ -175,7 +164,6 @@ export default function LoginPage() {
         </div>
       )}
 
-      {/* ANIMATIONS */}
       <style>
         {`
           @keyframes glowRed {
@@ -187,7 +175,6 @@ export default function LoginPage() {
             animation: glowRed 2s infinite;
           }
 
-          /* SMOOTH LOADING FADE */
           @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
@@ -196,7 +183,6 @@ export default function LoginPage() {
             animation: fadeIn 0.4s ease-out forwards;
           }
 
-          /* FULL SCREEN LOADER */
           .loader {
             width: 65px;
             height: 65px;

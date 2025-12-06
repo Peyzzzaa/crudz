@@ -18,16 +18,22 @@ export default function RegisterPage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  const [loading, setLoading] = useState(false); // ✅ Loading state
+  const [loading, setLoading] = useState(false);
 
   async function handleRegister(e: FormEvent) {
     e.preventDefault();
     setError("");
     setSuccess("");
-    setLoading(true); // ⬅️ Enable loader
+
+    if (!API_BASE) {
+      setError("API Base URL is not set.");
+      return;
+    }
+
+    setLoading(true);
 
     try {
-      const res = await fetch(`${API_BASE}/register`, {
+      const res = await fetch(`${API_BASE}/auth/register`, { // ✅ FIXED URL
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -42,7 +48,6 @@ export default function RegisterPage() {
 
       if (!res.ok) {
         setError(data.message || "Registration failed");
-        setLoading(false); // ⬅️ Stop loader
         return;
       }
 
@@ -51,35 +56,27 @@ export default function RegisterPage() {
 
     } catch {
       setError("Network slow or server unreachable.");
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   }
 
   return (
     <div
       className="relative min-h-screen w-full bg-cover bg-center bg-black"
-      style={{ backgroundImage: "url('/register.jpg')" }}
+      style={{ backgroundImage: "url('/deed.jpg')" }}
     >
-      {/* Dark overlay */}
       <div className="absolute inset-0 bg-black/70"></div>
 
-      {/* TOP RIGHT TITLE */}
       <div className="absolute top-4 right-4 text-right z-20">
         <h1 className="text-2xl sm:text-3xl font-extrabold tracking-wide text-red-500 drop-shadow-lg">
           FIZZYYY
         </h1>
-        <p className="text-sm sm:text-lg font-semibold text-gray-300 drop-shadow-lg">
-          CALL OF DUTY STORE
-        </p>
       </div>
 
-      {/* FORM BOX */}
-      <div className="absolute top-25 right-10 w-[380px] md:w-[430px] xl:w-[450px] z-20">
+      <div className="absolute top-19 left-20 w-[380px] md:w-[430px] xl:w-[450px] z-20">
         <div className="bg-black/85 backdrop-blur-md rounded-2xl shadow-2xl border border-red-700/60
-                        p-8 md:p-10 
-                        animate-glow-red">
-
+                        p-8 md:p-10 animate-glow-red">
           <h2 className="text-center text-3xl font-bold text-red-500 drop-shadow">
             REGISTER
           </h2>
@@ -88,34 +85,28 @@ export default function RegisterPage() {
           </p>
 
           <form onSubmit={handleRegister} className="space-y-5">
-
-            {/* Username */}
             <div className="relative">
               <input
                 type="text"
                 placeholder="Enter Username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="w-full px-4 py-3 pl-11 bg-black/40 text-white rounded-xl 
-                           border border-red-700/40 focus:ring-2 focus:ring-red-500 outline-none"
+                className="w-full px-4 py-3 pl-11 bg-black/40 text-white rounded-xl border border-red-700/40 focus:ring-2 focus:ring-red-500 outline-none"
                 required
               />
               <User className="absolute left-3 top-3 text-red-500" size={18} />
             </div>
 
-            {/* Password */}
             <div className="relative">
               <input
                 type={showPass ? "text" : "password"}
                 placeholder="Enter Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 pl-11 pr-10 bg-black/40 text-white rounded-xl 
-                           border border-red-700/40 focus:ring-2 focus:ring-red-500 outline-none"
+                className="w-full px-4 py-3 pl-11 pr-10 bg-black/40 text-white rounded-xl border border-red-700/40 focus:ring-2 focus:ring-red-500 outline-none"
                 required
               />
               <Lock className="absolute left-3 top-3 text-red-500" size={18} />
-
               <button
                 type="button"
                 onClick={() => setShowPass(!showPass)}
@@ -125,26 +116,22 @@ export default function RegisterPage() {
               </button>
             </div>
 
-            {/* Birthdate */}
             <div className="relative">
               <input
                 type="date"
                 value={birthdate}
                 onChange={(e) => setBirthdate(e.target.value)}
-                className="w-full px-4 py-3 pl-11 bg-black/40 text-white rounded-xl 
-                           border border-red-700/40 focus:ring-2 focus:ring-red-500 outline-none"
+                className="w-full px-4 py-3 pl-11 bg-black/40 text-white rounded-xl border border-red-700/40 focus:ring-2 focus:ring-red-500 outline-none"
                 required
               />
               <Calendar className="absolute left-3 top-3 text-red-500" size={18} />
             </div>
 
-            {/* Civil Status */}
             <div className="relative">
               <select
                 value={civilStatus}
                 onChange={(e) => setCivilStatus(e.target.value)}
-                className="w-full px-4 py-3 pl-11 bg-black/40 text-white rounded-xl 
-                           border border-red-700/40 focus:ring-2 focus:ring-red-500 outline-none"
+                className="w-full px-4 py-3 pl-11 bg-black/40 text-white rounded-xl border border-red-700/40 focus:ring-2 focus:ring-red-500 outline-none"
                 required
               >
                 <option value="">Select civil status</option>
@@ -155,19 +142,13 @@ export default function RegisterPage() {
               <Heart className="absolute left-3 top-3 text-red-500" size={18} />
             </div>
 
-            {/* Error */}
             {error && <p className="text-red-400 text-sm text-center">{error}</p>}
-
-            {/* Success */}
-            {success && (
-              <p className="text-green-400 text-sm text-center">{success}</p>
-            )}
+            {success && <p className="text-green-400 text-sm text-center">{success}</p>}
 
             <Button
               type="submit"
-              disabled={loading} // ⬅️ Disable button during loading
-              className="w-full bg-red-700 text-white hover:bg-red-800 
-                         py-6 rounded-xl text-lg shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={loading}
+              className="w-full bg-red-700 text-white hover:bg-red-800 py-6 rounded-xl text-lg shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? "Processing..." : "Register"}
             </Button>
@@ -184,14 +165,12 @@ export default function RegisterPage() {
         </div>
       </div>
 
-      {/* FULL SCREEN LOADING OVERLAY */}
       {loading && (
         <div className="absolute inset-0 bg-black/80 flex items-center justify-center z-50">
           <div className="loader"></div>
         </div>
       )}
 
-      {/* STYLES */}
       <style>
         {`
         @keyframes glowRed {
@@ -204,7 +183,6 @@ export default function RegisterPage() {
           animation: glowRed 2s infinite ease-in-out;
         }
 
-        /* LOADER */
         .loader {
           width: 60px;
           height: 60px;
